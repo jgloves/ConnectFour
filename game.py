@@ -87,8 +87,30 @@ class Game:
         # The player has successfully inserted a token
         player.num_tokens -= 1
 
+    def check_columns_for_win(self, player):
+        for col in self.board.slots:
+            col_index = self.board.slots.index(col)
+            consecutive_counter = 0
+            current_row = 0
+            while consecutive_counter < 4 and current_row < Board.num_rows:
+                if self.board.slots[col_index][current_row].state == player.color:
+                    consecutive_counter += 1
+                else:
+                    consecutive_counter = 0
+                current_row += 1
+            if consecutive_counter == 4:
+                return True
+        return False
+
     def check_win_condition(self):
-        #check self.board.slots columns first
+        #check columns
+        for player in self.players:
+            if self.check_columns_for_win(player):
+                print("{} wins!".format(player.name))
+                return True
+        #TODO - check rows next
+
+        #TODO - finally, check diagonals
         return False
 
 
