@@ -102,14 +102,28 @@ class Game:
                 return True
         return False
 
+    def check_rows_for_win(self, player):
+        for row in range(Board.num_rows):
+            consecutive_counter = 0
+            for col in range(Board.num_cols):
+                current_slot = self.board.slots[col][row]
+                if current_slot.state == player.color:
+                    consecutive_counter += 1
+                else:
+                    consecutive_counter = 0
+                if consecutive_counter == 4:
+                    return True
+        return False
+
+
     def check_win_condition(self):
         #check columns
         for player in self.players:
             if self.check_columns_for_win(player):
-                print("{} wins!".format(player.name))
                 return True
-        #TODO - check rows next
-
+        #check rows
+            if self.check_rows_for_win(player):
+                return True
         #TODO - finally, check diagonals
         return False
 
@@ -149,13 +163,21 @@ if __name__ == "__main__":
             game.play_turn(player1)
         else:
             game.play_turn(player2)
-        #switch players
-        player1_turn = not player1_turn
 
+        print()
         print(game.board)
         win_condition = game.check_win_condition()
 
-    #If player1_turn == True, player2 won. If player1_turn == False, player1 won.
+        if win_condition:
+            winner = ""
+            if player1_turn:
+                winner = player1.name
+            else:
+                winner = player2.name
+            print("{} wins!".format(winner))
+        else:
+            # switch players
+            player1_turn = not player1_turn
 
 
 
