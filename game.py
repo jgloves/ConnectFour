@@ -4,8 +4,8 @@ from enum import Enum
 class Color(Enum):
 
     BLANK = "BLANK"
-    RED = "RED"
-    YELLOW = "YELLOW"
+    RED = "X"
+    YELLOW = "O"
 
 
 class Slot:
@@ -17,9 +17,9 @@ class Slot:
 
     def __repr__(self):
         if self.state == Color.RED:
-            return "(R)"
+            return "(X)"
         elif self.state == Color.YELLOW:
-            return "(Y)"
+            return "(O)"
         return "( )"
 
 
@@ -172,26 +172,26 @@ if __name__ == "__main__":
     print("Welcome to Connect Four!\n")
     player1_name = input("Enter Player 1's name: ")
     print('Hello, ' + player1_name)
-    color_letter = input("Choose your color: R for red, Y for yellow: ")
+    color_letter = input("Choose your token symbol: the letter X or the letter O ").upper()
 
     player1_color = Color.RED
-    if color_letter == "Y":
+    if color_letter == "O":
         player1_color = Color.YELLOW
 
     player1 = Player(player1_name, player1_color)
 
-    print("Player 1: {}, color {}".format(player1.name, player1.color.value))
+    print("Player 1: {}, symbol {}".format(player1.name, player1.color.value))
 
     player2_name = input("Enter Player 2's name: ")
     print('Hello, ' + player2_name)
 
-    if color_letter == "R":
+    if color_letter == "X":
         player2_color = Color.YELLOW
     else:
         player2_color = Color.RED
 
     player2 = Player(player2_name, player2_color)
-    print("Player 2: {}, color {}".format(player2.name, player2.color.value))
+    print("Player 2: {}, symbol {}".format(player2.name, player2.color.value))
 
     game = Game(player1, player2)
     win_condition = False
@@ -215,7 +215,10 @@ if __name__ == "__main__":
             else:
                 winner = player2.name
             print("{} wins!".format(winner))
+            win_condition = True
         else:
             # switch players
             player1_turn = not player1_turn
-    print("It's a tie!")
+
+    if not win_condition:
+        print("It's a tie!")
