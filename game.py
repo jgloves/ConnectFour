@@ -175,6 +175,9 @@ if __name__ == "__main__":
     color_letter = input("Choose your token symbol: the letter X or the letter O ").upper()
 
     player1_color = Color.RED
+    if color_letter != "X" and color_letter != "O":
+        print("I didn't understand that, so let's just say you chose X")
+
     if color_letter == "O":
         player1_color = Color.YELLOW
 
@@ -185,7 +188,7 @@ if __name__ == "__main__":
     player2_name = input("Enter Player 2's name: ")
     print('Hello, ' + player2_name)
 
-    if color_letter == "X":
+    if player1_color == Color.RED:
         player2_color = Color.YELLOW
     else:
         player2_color = Color.RED
