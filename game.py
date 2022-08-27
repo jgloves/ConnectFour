@@ -179,7 +179,7 @@ if __name__ == "__main__":
     player1_turn = True
     print(game.board)
 
-    while not win_condition and player1.num_tokens > 0: #player 2 can't run out of tokens before player 1
+    while not win_condition and player2.num_tokens > 0:
         if player1_turn:
             game.play_turn(player1)
         else:
@@ -199,3 +199,4 @@ if __name__ == "__main__":
         else:
             # switch players
             player1_turn = not player1_turn
+    print("It's a tie!")
