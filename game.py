@@ -37,7 +37,7 @@ class Board:
     def __repr__(self):
         self_string = ""
         for row in range(5, -1, -1):
-            self_string_components = [str(self.slots[col][row]) for col in range(7)]
+            self_string_components = [str(self.slots[col][row]) for col in range(Board.num_cols)]
             self_string += " ".join(self_string_components) + "\n"
         self_string += " A   B   C   D   E   F   G\n"
         return self_string
@@ -82,7 +82,13 @@ class Game:
         finished = False
         print("It's {}'s turn.".format(player.name))
         while not finished:
-            column_string = input("Which column will you drop your token in? ")
+            valid_column = False
+            while not valid_column:
+                column_string = input("Which column will you drop your token in? ").upper()
+                if column_string in ["A", "B", "C", "D", "E", "F", "G"]:
+                    valid_column = True
+                else:
+                    print("That wasn't a valid column. Enter a letter between A and G.")
             finished = self.insert_token(player, column_string)
         # The player has successfully inserted a token
         player.num_tokens -= 1
@@ -175,7 +181,7 @@ if __name__ == "__main__":
     color_letter = input("Choose your token symbol: the letter X or the letter O ").upper()
 
     player1_color = Color.RED
-    if color_letter != "X" and color_letter != "O":
+    if color_letter not in ["X", "O"]:
         print("I didn't understand that, so let's just say you chose X")
 
     if color_letter == "O":
