@@ -121,13 +121,20 @@ class Game:
                     return True
         return False
 
-    def check_increasing_diagonals_for_win(self, player):
-        starting_diagonal_slot_locations = [(0, 0), (0, 1), (0, 2), (1, 0), (2, 0), (3, 0)]
-        for location in starting_diagonal_slot_locations:
+    def check_diagonals_for_win(self, player, slope=0):
+        starting_decreasing_diagonal_slot_locations = [(0, 3), (0, 4), (0, 5), (1, 5), (2, 5), (3, 5)]
+        starting_increasing_diagonal_slot_locations = [(0, 0), (0, 1), (0, 2), (1, 0), (2, 0), (3, 0)]
+        starting_slot_locations = []
+        if slope == 1:
+            starting_slot_locations = starting_increasing_diagonal_slot_locations
+        if slope == -1:
+            starting_slot_locations = starting_decreasing_diagonal_slot_locations
+        for location in starting_slot_locations:
             col = location[0]
             row = location[1]
             consecutive_counter = 0
-            while col < Board.num_cols and row < Board.num_rows:
+            row_condition = True
+            while col < Board.num_cols and row_condition:
                 current_slot = self.board.slots[col][row]
                 if current_slot.state == player.color:
                     consecutive_counter += 1
@@ -136,26 +143,12 @@ class Game:
                 if consecutive_counter == 4:
                     return True
                 col += 1
-                row += 1
+                row += slope
+                if slope == 1:
+                    row_condition = (row < Board.num_rows)
+                if slope == -1:
+                    row_condition = (row >= 0)
         return False
-
-    def check_decreasing_diagonals_for_win(self, player):
-        starting_diagonal_slot_locations = [(0, 3), (0, 4), (0, 5), (1, 5), (2, 5), (3, 5)]
-        for location in starting_diagonal_slot_locations:
-            col = location[0]
-            row = location[1]
-            consecutive_counter = 0
-            while col < Board.num_cols and row >= 0:
-                current_slot = self.board.slots[col][row]
-                if current_slot.state == player.color:
-                    consecutive_counter += 1
-                else:
-                    consecutive_counter = 0
-                if consecutive_counter == 4:
-                    return True
-                col += 1
-                row -= 1
-            return False
 
     def check_win_condition(self):
         for player in self.players:
@@ -165,11 +158,8 @@ class Game:
             # check rows
             if self.check_rows_for_win(player):
                 return True
-            # check increasing diagonals
-            if self.check_increasing_diagonals_for_win(player):
-                return True
-            # check decreasing diagonals
-            if self.check_decreasing_diagonals_for_win(player):
+            # check increasing and decreasing diagonals
+            if self.check_diagonals_for_win(player, 1) or self.check_diagonals_for_win(player, -1):
                 return True
         return False
 
